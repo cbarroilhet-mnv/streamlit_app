@@ -102,7 +102,8 @@ if st.button("Add Lease"):
     """
 
     try:
-        session.sql(sql)
+        
+        _= session.sql(sql).collect()
         
         # Clear the input fields after successful insertion
         
