@@ -1,4 +1,4 @@
 import streamlit
 
-streamlit.title('Lease Model')
+streamlit.title('Lease Moduyuyuyuyel')
 streamlit.header('Add New Lease')
