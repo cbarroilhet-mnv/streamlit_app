@@ -5,6 +5,7 @@ from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import sum, col
 import altair as alt
 import snowflake.connector
+from dateutil.relativedelta import relativedelta
 
 st.set_page_config(layout="wide")
 
@@ -17,25 +18,23 @@ st.write(
     """
 )
 
+
 # Create input fields for the columns in the LEASE_DETAIL table
+st.markdown("**Lease Information**")
 LEASE_ID = st.text_input("Lease ID")
 LEASE_NAME = st.text_input("Lease Name")
 START_DATE = st.date_input("Start Date")
 END_DATE = st.date_input("End Date")
-INCREASE_DATE = st.date_input("Increase Date")
+st.markdown("**Monthly Rent**")
 BASE_RENT = st.number_input("Base Rent")
 BASE_PROMOTIONAL_FUND = st.number_input("Base Promotional Fund")
 BASE_OTHER = st.number_input("Base Other")
 BASE_OUTGOINGS = st.number_input("Base Outgoings")
-MONTHLY_RENTAL_GROSS = st.number_input("Monthly Rental Gross")
+st.markdown("**Rent Increase Rate**")
 REFERENCE_RATE = st.number_input("Reference Rate")
 FINANCIAL_SPREAD_ADJ = st.number_input("Financial Spread Adj")
 LEASE_SPECIFIC_ADJ = st.number_input("Lease Specific Adj")
-ANNUAL_DISCOUNT_RATE = st.number_input("Annual Discount Rate")
-MONTHLY_DISCOUNT_RATE = st.number_input("Monthly Discount Rate")
-ROUA_LIFE = st.number_input("ROUA Life")
 CPI_CHECK = st.checkbox("CPI Check")
-ANNUAL_RENT_INCREASE = st.number_input("Annual Rent Increase")
 STATUS = st.text_input("Status")
 CPI = st.number_input("CPI")
 CPI_SENSITIVE_ADJ = st.number_input("CPI Sensitive Adj")
@@ -50,7 +49,18 @@ data = session.sql("SELECT * FROM STREAMLIT_APPS.LEASE_DB.LEASE_DETAIL").collect
 if st.button("Add Lease"):
     # Get the active Snowflake session
     session = get_active_session()   
+    INCREASE_DATE = END_DATE
+    MONTHLY_RENTAL_GROSS = BASE_RENT + BASE_OTHER + BASE_OUTGOINGS + BASE_PROMOTIONAL_FUND
+    roua_life = relativedelta(END_DATE, START_DATE)
+    roua_life_months = roua_life.years * 12 + roua_life.months + roua_life.days / 30.0
+    ANNUAL_DISCOUNT = REFERENCE_RATE + FINANCIAL_SPREAD_ADJ + LEASE_SPECIFIC_ADJ
+    if CPI_CHECK:
+        ANNUAL_RENT_INCREASE = CPI + CPI_SENSITIVE_ADJ + ANNUAL_DISCOUNT
+    else:
+        ANNUAL_RENT_INCREASE = ANNUAL_DISCOUNT
+    ANNUAL_DISCOUNT_RATE = ANNUAL_RENT_INCREASE
 
+    MONTHLY_DISCOUNT_RATE = ANNUAL_DISCOUNT_RATE/12
     # Insert the entered data into the LEASE_DETAIL table
     sql = f"""
     INSERT INTO STREAMLIT_APPS.LEASE_DB.LEASE_DETAIL (
@@ -92,9 +102,9 @@ if st.button("Add Lease"):
         {LEASE_SPECIFIC_ADJ},
         {ANNUAL_DISCOUNT_RATE},
         {MONTHLY_DISCOUNT_RATE},
-        {ROUA_LIFE},
+        {roua_life_months},
         {CPI_CHECK},
-        {ANNUAL_RENT_INCREASE},
+        {0},
         '{STATUS}',
         {CPI},
         {CPI_SENSITIVE_ADJ}
