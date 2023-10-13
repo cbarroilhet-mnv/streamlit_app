@@ -1,40 +1,25 @@
 import streamlit as st
-import bokeh
-from bokeh import models 
 import pandas as pd
+from bokeh.plotting import figure
+from bokeh.models import ColumnDataSource, CustomJS
+from bokeh.models.widgets import DataTable, TableColumn
+from streamlit_bokeh_events import streamlit_bokeh_events
 
-# Sample data
-data = {
-    "Name": ["John", "Alice", "Bob"],
-    "Age": [30, 25, 35],
-    "Action": ["Click", "Click", "Click"]
-}
+# Create a Streamlit app
+st.title("Interactive Data Visualization with Streamlit and Bokeh")
 
-df = pd.DataFrame(data)
+# Your app code here
+# Create a Bokeh plot
+p = figure(width=400, height=400)
+p.circle([1, 2, 3, 4, 5], [6, 7, 2, 4, 5])
+st.bokeh_chart(p)
+def on_button_click(event):
+    st.write("Button Clicked!")
 
-# Create a Bokeh DataTable
-source = ColumnDataSource(df)
-template = """
-<a href="#" onclick="bokeh_streamlit_events.emit({event_name: 'cell_click', data: {index: source['index']}});">Click</a>
-"""
-
-formatter = HTMLTemplateFormatter(template=template)
-columns = [
-    TableColumn(field="Name", title="Name"),
-    TableColumn(field="Age", title="Age"),
-    TableColumn(field="Action", title="Action", formatter=formatter)
-]
-
-table = DataTable(source=source, columns=columns, width=400, height=150)
-
-# Streamlit app
-st.title("Clickable DataTable with Bokeh")
-
-# Display the DataTable
-st.bokeh_chart(table)
-
-# Handle the click event using streamlit_bokeh_events
-click_event = streamlit_bokeh_events(table, events="cell_click")
-
-if click_event:
-    st.write(f"Clicked row {click_event['index']}")
+button = st.button("Click Me")
+streamlit_bokeh_events(
+    bokeh_plot=p,
+    events="ButtonClick",
+    key="my_event",
+    on_event=on_button_click
+)
