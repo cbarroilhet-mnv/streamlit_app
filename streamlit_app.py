@@ -1,4 +1,5 @@
 import streamlit as st
+import bokeh.models
 from bokeh.models import ColumnDataSource
 from bokeh.models import CustomJS
 from bokeh.models import DataTable
