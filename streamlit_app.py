@@ -1,5 +1,6 @@
 import streamlit as st
-from bokeh.models import ColumnDataSource, CustomJS
+from bokeh.models import ColumnDataSource
+from bokeh.models import CustomJS
 from bokeh.models import DataTable
 from bokeh.models import TableColumn
 from bokeh.models import HTMLTemplateFormatter
