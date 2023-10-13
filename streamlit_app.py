@@ -1,6 +1,8 @@
 import streamlit as st
 from bokeh.models import ColumnDataSource, CustomJS
-from bokeh.models import DataTable, TableColumn, HTMLTemplateFormatter
+from bokeh.models import DataTable
+from bokeh.models import TableColumn
+from bokeh.models import HTMLTemplateFormatter
 from streamlit_bokeh_events import streamlit_bokeh_events
 import pandas as pd
 
