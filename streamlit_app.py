@@ -1,25 +1,23 @@
 import streamlit as st
-import pandas as pd
-from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, CustomJS
-from bokeh.models.widgets import DataTable, TableColumn
-from streamlit_bokeh_events import streamlit_bokeh_events
+import snowflake.snowpark as snowpark
+import pandas as pd  # Import pandas for creating the DataFrame
+from snowflake.snowpark.functions import current_user
+from datetime import date
 
-# Create a Streamlit app
-st.title("Interactive Data Visualization with Streamlit and Bokeh")
 
-# Your app code here
-# Create a Bokeh plot
-p = figure(width=400, height=400)
-p.circle([1, 2, 3, 4, 5], [6, 7, 2, 4, 5])
-st.bokeh_chart(p)
-def on_button_click(event):
-    st.write("Button Clicked!")
-
-button = st.button("Click Me")
-streamlit_bokeh_events(
-    bokeh_plot=p,
-    events="ButtonClick",
-    key="my_event",
-    on_event=on_button_click
+conn = connect(
+    user='CAMILOB',
+    password='D@t@verse$$1',
+    account='ABYLBQO.ZJ05545.snowflakecomputing.com',
+    warehouse='LEASE_WH',
+    database='STREAMLIT_APPS',
+    schema='WES_POC',
+    role='ACCOUNTADMIN',
+    cursor_class=DictCursor
 )
+
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM NEW_TRANSACTIONS)
+data = cursor.fetchall()
+
+st.write(pd.DataFrame(data))
