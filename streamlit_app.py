@@ -61,10 +61,14 @@ with col1:
     
     # Check if data is retrieved
 if not farm_data.empty:
-    crop = str(farm_data['CROP'][0])
-    area = str(farm_data['HA'][0])
-    yield_ = str(farm_data['YIELD'][0])
-    tonnes = str(farm_data['TONNES'][0])
+    # Access the first row of the DataFrame
+    first_row = farm_data.iloc[0]
+    
+    # Extract values
+    crop = str(first_row['CROP'])
+    area = str(first_row['HA'])
+    yield_ = str(first_row['YIELD'])
+    tonnes = str(first_row['TONNES'])
 
     with crop_column:
         st.markdown("Crop")
