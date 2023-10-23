@@ -55,7 +55,7 @@ with col1:
     crop_column, area_column, yield_column, tonnes_column = st.columns(4)
     # Create a DataFrame from the FARM table and filter based on selected farm
     farm_df = conn.cursor()
-    farm_df = execute.("SELECT * FROM WES_POC.FARM WHERE FARM = 'Farm 1'")
+    farm_df = execute("SELECT * FROM WES_POC.FARM WHERE FARM = 'Farm 1'")
     farm_df = farm_df.fetch_pandas_all()
 
     # Select the MONTH and RENT columns
