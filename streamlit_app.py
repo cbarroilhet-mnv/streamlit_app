@@ -46,5 +46,4 @@ existing_farms = [row[0] for row in distinct_farms_data]
 cursor_2.close()
 
 st.title(existing_farms)
-streamlit run "c:/Users/CamiloBarroilhet/Desktop/Python/Camilo Project/Streamlit"
 
