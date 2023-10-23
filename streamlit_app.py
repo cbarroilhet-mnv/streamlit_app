@@ -1,19 +1,17 @@
-import streamlit as st
-import pandas as pd
-import snowflake.connector
+from snowflake.snowpark import Session
 
 # Create Session object
-conn = snowflake.connector.connect(
+connection_parameters = {
     user='CAMILOB',
     password='D@t@verse$$1',
     account='ABYLBQO-ZJ05545',
     warehouse='LEASE_WH',
     database='STREAMLIT_APPS',
     schema='WES_POC'
-)
+}
 
-# Create a cursor
-cursor = conn.cursor()
-cursor.execute("select current_user()")
-current_user = cursor.fetch_pandas_all().iloc[0]
-st.info(current_user)
+test_session = Session.builder.configs(connection_parameters).create()
+
+ev_sales = test_session.sql(("select current_user()").collect()
+ev_sales_df = ev_sales.to_pandas()
+st.dataframe(ev_sales_df)
