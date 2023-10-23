@@ -6,7 +6,7 @@ import pandas as pd
 # Create Session object
 def create_session_object():
    connection_parameters = {
-      "account": "qo61633.ap-southeast-2.snowflakecomputing.com",
+      "account": "ABYLBQO-ZJ05545",
       "user": "CAMILOB",
       "password": "D@t@verse$$1",
       "role": "ACCOUNTADMIN",
