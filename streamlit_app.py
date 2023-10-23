@@ -45,5 +45,22 @@ distinct_farms_data = cursor_2.fetch_pandas_all()
 existing_farms = [row[0] for row in distinct_farms_data]
 cursor_2.close()
 
-st.table(existing_farms)
+col1, col2, col3, col4 = st.columns([2.5,1.5,1.5,2.5])
+
+
+# LEFT ONE: CROP PRODUCTION BY FARM# Add content to the first column ("Crop Production")
+with col1:
+    st.subheader("Crop Production")
+    # Create four columns within this column
+    crop_column, area_column, yield_column, tonnes_column = st.columns(4)
+    # Create a DataFrame from the FARM table and filter based on selected farm
+    farm_df = conn.cursor()
+    farm_df = execute.("SELECT * FROM WES_POC.FARM WHERE FARM = 'Farm 1'")
+    farm_df = farm_df.fetch_pandas_all()
+
+    # Select the MONTH and RENT columns
+    crop = farm_df[0]['CROP']
+    area = farm_df[0]['HA']
+    yield_ = farm_df[0]['YIELD']
+    tonnes = farm_df[0]['TONNES']
 
