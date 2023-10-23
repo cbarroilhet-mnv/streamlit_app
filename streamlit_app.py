@@ -54,33 +54,35 @@ with col1:
     # Create four columns within this column
     crop_column, area_column, yield_column, tonnes_column = st.columns(4)
     # Create a DataFrame from the FARM table and filter based on selected farm
+    selected_farm = "Farm 1"
     farm_df = conn.cursor()
     farm_df.execute("SELECT * FROM WES_POC.FARM")
     farm_df = farm_df.fetch_pandas_all()
     
-    # Select the MONTH and RENT columns
-    crop = farm_df[0]['CROP']
-    area = farm_df[0]['HA']
-    yield_ = farm_df[0]['YIELD']
-    tonnes = farm_df[0]['TONNES']
-    farm_df.close()
+    # Check if data is retrieved
+if not farm_data.empty:
+    crop = str(farm_data['CROP'][0])
+    area = str(farm_data['HA'][0])
+    yield_ = str(farm_data['YIELD'][0])
+    tonnes = str(farm_data['TONNES'][0])
+
     with crop_column:
-        
         st.markdown("Crop")
         st.info(crop)
-    
+
     with area_column:
         st.write("Crop Area (Ha)")
-        formatted_area = "{:,.0f}".format(area)  # Format with a comma and round to 0 decimal places
+        formatted_area = "{:,.0f}".format(float(area))
         st.info(formatted_area)
-    
+
     with yield_column:
         st.write("Yield / Ha")
-        formatted_yield = "{:,.0f}".format(yield_)  # Format with a comma and round to 0 decimal places
+        formatted_yield = "{:,.0f}".format(float(yield_))
         st.info(formatted_yield)
-    
+
     with tonnes_column:
         st.write("Tonnes|Bales")
-        formatted_tonnes = "{:,.0f}".format(tonnes)  # Format with a comma and round to 0 decimal places
+        formatted_tonnes = "{:,.0f}".format(float(tonnes))
         st.info(formatted_tonnes)
-
+else:
+    st.warning("No data found for the selected farm.")
