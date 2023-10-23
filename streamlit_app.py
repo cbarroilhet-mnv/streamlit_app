@@ -11,13 +11,16 @@ connection_parameters = {
     'schema': 'WES_POC'
 }
 
-test_session = Session.builder.configs(connection_parameters).create()
+try:
+    test_session = Session.builder.configs(connection_parameters).create()
 
-# Execute the SQL query
-ev_sales = test_session.execute("SELECT current_user()")
+    # Execute the SQL query
+    ev_sales = test_session.execute("SELECT current_user()")
 
-# Convert the result to a Pandas DataFrame
-ev_sales_df = ev_sales.to_pandas()
+    # Convert the result to a Pandas DataFrame
+    ev_sales_df = ev_sales.to_pandas()
 
-# Display the DataFrame using Streamlit
-st.dataframe(ev_sales_df)
+    # Display the DataFrame using Streamlit
+    st.dataframe(ev_sales_df)
+except Exception as e:
+    st.error(f"An error occurred: {str(e)}")
