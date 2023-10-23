@@ -45,5 +45,5 @@ distinct_farms_data = cursor_2.fetch_pandas_all()
 existing_farms = [row[0] for row in distinct_farms_data]
 cursor_2.close()
 
-st.title(existing_farms)
+st.table(existing_farms)
 
